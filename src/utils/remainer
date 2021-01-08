@@ -1,0 +1,131 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id='timer-session-ctnr'></div>
+    <h1>Accueil</h1>
+    <p><a href="html/page2.html">Page 2</a></p>
+    <p><a href="html/page3.html">Page 3</a></p>
+
+    <input id='start-session-btn' type="button" value="Démarrer session de 20 minutes">
+    <script src="js/util.js"></script>
+    <script src="js/index.js"></script>
+</body>
+</html>
+
+<!--
+	 index.js
+	(() => {
+
+    let expirationTime       = window.localStorage.getItem(LOCALE_STORAGE_NAME);
+
+    const $timerSessionCtnr = document.getElementById('timer-session-ctnr');
+    const $startSessionBtn  = document.getElementById('start-session-btn');
+
+    let interval = null;
+    if(expirationTime) {
+        interval = TIMER_HANDLER($timerSessionCtnr, expirationTime);
+    }
+
+    $startSessionBtn.addEventListener('click', () => {
+        if(interval) {
+            window.clearInterval(interval);
+            window.localStorage.removeItem(LOCALE_STORAGE_NAME);
+            interval = null;
+            $timerSessionCtnr.innerText = 'Session interrompue';
+        } else {
+            interval = TIMER_HANDLER($timerSessionCtnr, null);
+        }
+    });
+  })();		
+-->
+
+
+
+
+
+
+
+<!-- page2.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 2</title>
+</head>
+<body>
+    <div id='timer-session-ctnr'></div>
+    <h1>Vous etes sur la page 2</h1>
+    <p><a href="../index.html">Index</a></p>
+    <script src="../js/util.js"></script>
+    <script src="../js/page2.js"></script>
+</body>
+</html>
+
+<!--
+	page2.js
+
+	(() => {
+    let expirationtime      = window.localStorage.getItem(LOCALE_STORAGE_NAME);
+    const $timerSessionCtnr = document.getElementById('timer-session-ctnr');
+    if(expirationtime) {
+        TIMER_HANDLER($timerSessionCtnr, expirationtime);
+    }
+	})();
+-->
+
+
+
+
+
+
+
+<!--  
+	util.js
+
+	const LOCALE_STORAGE_NAME = 'brunoheritier240486testtimer';
+  const SESSION_DURATION_MS = 120000;
+
+  const CONVERT_SEC_TO_MIN_SEC = seconds => {
+    let min = Math.floor(seconds / 60);
+    if(min < 10) {
+        min = '0' + min;
+    }
+    let sec = seconds % 60;
+    if(sec < 10) {
+        sec = '0' + sec;
+    }
+    return `${min}:${sec}`;
+  };
+
+	const TIMER_HANDLER = ($timerSessionCtnr, expirationTime_) => {
+    let expirationTime = expirationTime_;
+    const now = new Date().getTime();
+    if(!expirationTime) {
+        expirationTime = now + SESSION_DURATION_MS;
+        window.localStorage.setItem(LOCALE_STORAGE_NAME, expirationTime);
+    }
+
+    let remainingTime = expirationTime - now;
+    let interval = window.setInterval(() => {
+        remainingTime -= 1000;
+        if(remainingTime < 1) {
+            $timerSessionCtnr.innerText = `Session expirée`;
+            window.clearInterval(interval);
+            window.localStorage.removeItem(LOCALE_STORAGE_NAME);
+        } else {
+            $timerSessionCtnr.innerText = `Votre session expirera dans ${CONVERT_SEC_TO_MIN_SEC(Math.round(remainingTime/1000))}`;
+        }
+    } ,1000);
+
+    return interval;
+	}
+-->

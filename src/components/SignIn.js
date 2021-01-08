@@ -10,10 +10,12 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/styles'
+import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import { LoginService } from "../services/services";
+import { LoginService } from "../services/Services";
+import { TOKEN_KEY, USER_ID_KEY } from "../utils/Constants";
+import Routes from '../Routes';
 
 
 class SignIn extends React.Component {
@@ -32,11 +34,13 @@ class SignIn extends React.Component {
         LoginService(login, password)
             .then(res => {
                 console.log(res);
-                this.props.history.push('/');
+                localStorage.setItem(TOKEN_KEY, res.data.result.token);
+                localStorage.setItem(USER_ID_KEY, res.data.result.id);
+                this.props.history.push(Routes.conversations);
             })
             .catch(err => {
                 console.log(err);
-            })
+            });
     }
 
     changeHandler = (event) => {
@@ -83,10 +87,6 @@ class SignIn extends React.Component {
                             id="password"
                             onChange={this.changeHandler}
                             autoComplete="current-password"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
                         />
                         <Button
                             type="submit"

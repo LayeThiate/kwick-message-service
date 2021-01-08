@@ -11,9 +11,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withStyles } from '@material-ui/styles'
 import PropTypes from 'prop-types';
-import { SignUpService } from '../services/services';
-
-
+import { SignUpService } from '../services/Services';
+import { TOKEN_KEY, USER_ID_KEY } from "../utils/Constants";
+import Routes from '../Routes';
 
 
 class SignUp extends React.Component {
@@ -37,6 +37,9 @@ class SignUp extends React.Component {
         SignUpService(login, password)
             .then(res => {
                 console.log(res);
+                localStorage.setItem(TOKEN_KEY, res.data.result.token);
+                localStorage.setItem(USER_ID_KEY, res.data.result.id);
+                this.props.history.push(Routes.conversations);
             })
             .catch(err => {
                 console.log(err);

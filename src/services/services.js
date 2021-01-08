@@ -8,4 +8,16 @@ const LoginService = (login, password) => {
     return axios.get(`http://greenvelvet.alwaysdata.net/kwick/api/login/${login}/${password}`);
 }
 
-export {SignUpService, LoginService};
+const Users = (token) => {
+    return axios.get(`http://greenvelvet.alwaysdata.net/kwick/api/user/logged/${token}`);
+}
+
+const TalkList = (token) => {
+    return axios.get(`http://greenvelvet.alwaysdata.net/kwick/api/talk/list/${token}/0`);
+}
+
+const SentMessage = (token, userId, message) => {
+    return axios.get(`http://greenvelvet.alwaysdata.net/kwick/api/say/${token}/${userId}/${message}`);
+}
+
+export {SignUpService, LoginService, Users, TalkList, SentMessage};
