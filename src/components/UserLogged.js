@@ -5,7 +5,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import { Users } from "../services/Services";
@@ -33,30 +32,17 @@ class UserLogged extends React.Component {
     }
 
     listUsers = () => {
-        console.log(this.state.users);
+        // console.log(this.state.users);
         return this.state.users.map(user => {
             return (
-                <React.Fragment>
-                     <Typography
-                                    component="h4"
-                                    variant="h4"
-                                    color="textPrimary"
-                                >
-                                    Utilisateurs connectés
-                                </Typography>
-                    <div>
-                    <ListItem alignItems="flex-start" divider key={user}>
-                        <ListItemAvatar>
-                            <Avatar alt={user} src="name" />
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={user}
-                        />
-                    </ListItem>
-                    </div>
-                    
-                </React.Fragment>
-
+                <ListItem alignItems="flex-start" divider key={user}>
+                    <ListItemAvatar>
+                        <Avatar alt={user} src="name" />
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={user}
+                    />
+                </ListItem>
             )
         });
     }

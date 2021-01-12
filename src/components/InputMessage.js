@@ -33,7 +33,7 @@ class InputMessage extends React.Component {
         .catch(error => {
             console.log(error);
         });
-        //console.log(this.state.content);
+        // console.log(this.state.content);
 
     }
 
@@ -69,7 +69,7 @@ const styles = makeStyles((theme) => ({
         margin: theme.spacing(1),
     },
     margin: {
-        margin: theme.spacing(1),
+        marginTop: theme.spacing(10),
       },
 }));
 

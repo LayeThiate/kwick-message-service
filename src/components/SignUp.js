@@ -97,7 +97,7 @@ class SignUp extends React.Component {
                         </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
-                                <Link href="/signin" variant="body2">
+                                <Link href={Routes.login} variant="body2">
                                     Already have an account? Sign in
                             </Link>
                             </Grid>

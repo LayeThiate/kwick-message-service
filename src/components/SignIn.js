@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -14,7 +12,7 @@ import { withStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
 import { LoginService } from "../services/Services";
-import { TOKEN_KEY, USER_ID_KEY } from "../utils/Constants";
+import { TOKEN_KEY, USER_ID_KEY, USER_NAME_KEY} from "../utils/Constants";
 import Routes from '../Routes';
 
 
@@ -36,6 +34,7 @@ class SignIn extends React.Component {
                 console.log(res);
                 localStorage.setItem(TOKEN_KEY, res.data.result.token);
                 localStorage.setItem(USER_ID_KEY, res.data.result.id);
+                localStorage.setItem(USER_NAME_KEY, this.state.login);
                 this.props.history.push(Routes.conversations);
             })
             .catch(err => {

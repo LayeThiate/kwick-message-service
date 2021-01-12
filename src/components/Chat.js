@@ -18,9 +18,11 @@ class Chat extends React.Component {
         return (
             <Grid container>
                 <Grid key="users" item xs={3}>
+                    <h2>Utilisateurs Connectés</h2>
                     <UserLogged />
                 </Grid>
                 <Grid key="messages" item xs={9}>
+                    <h2>Messages</h2>
                     <Message />
                     <InputMessage/>
                 </Grid>
