@@ -3,14 +3,14 @@ import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import FilledInput from '@material-ui/core/FilledInput';
-import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import Icon from '@material-ui/core/Icon';
-import { SentMessage } from '../services/Services';
-import { TOKEN_KEY, USER_ID_KEY } from '../utils/Constants';
+import {SentMessage} from '../services/Services';
+import {TOKEN_KEY, USER_ID_KEY} from '../utils/Constants';
 
-
+// Component allowing to write and send a message
 class InputMessage extends React.Component {
     constructor(props) {
         super(props);
@@ -19,7 +19,7 @@ class InputMessage extends React.Component {
 
     changeHandler = (event) => {
         let val = event.target.value;
-        this.setState({ content: val });
+        this.setState({content: val});
     }
 
     onSubmit = (event) => {
@@ -27,18 +27,18 @@ class InputMessage extends React.Component {
         const token = localStorage.getItem(TOKEN_KEY);
         const userId = localStorage.getItem(USER_ID_KEY);
         SentMessage(token, userId, this.state.content)
-        .then(response => {
-            console.log(response);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
         // console.log(this.state.content);
 
     }
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
             <FormControl fullWidth className={classes.margin} variant="filled">
                 <InputLabel htmlFor="filled-adornment-message">Envoyer un message</InputLabel>
@@ -70,7 +70,7 @@ const styles = makeStyles((theme) => ({
     },
     margin: {
         marginTop: theme.spacing(10),
-      },
+    },
 }));
 
 InputMessage.propTypes = {

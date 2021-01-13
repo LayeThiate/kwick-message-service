@@ -7,36 +7,43 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { withStyles } from '@material-ui/styles'
+import {withStyles} from '@material-ui/styles'
 import PropTypes from 'prop-types';
-import { SignUpService } from '../services/Services';
-import { TOKEN_KEY, USER_ID_KEY } from "../utils/Constants";
+import {SignUpService} from '../services/Services';
+import {TOKEN_KEY, USER_ID_KEY} from "../utils/Constants";
 import Routes from '../Routes';
 
-
+// Sign up component
 class SignUp extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             login: null,
-            password: null
+            password: null,
+            isPassed: true,
+            errorMessage: ''
         };
     }
 
     changeHandler = (event) => {
         let nam = event.target.name;
         let val = event.target.value;
-        this.setState({ [nam]: val });
+        this.setState({[nam]: val});
     }
 
     onSubmit = (event) => {
         event.preventDefault();
-        let { login, password } = this.state;
+        let {login, password} = this.state;
         SignUpService(login, password)
             .then(res => {
                 console.log(res);
+                // Set the error value
+                if (res.data.result.status === "failure") {
+                    this.setState({errorMessage: res.data.result.message});
+                    return;
+                }
                 localStorage.setItem(TOKEN_KEY, res.data.result.token);
                 localStorage.setItem(USER_ID_KEY, res.data.result.id);
                 this.props.history.push(Routes.conversations);
@@ -46,18 +53,26 @@ class SignUp extends React.Component {
             })
     }
 
+    // Show the error returned by the sever
+    showErrorMessage = () => {
+        return (
+            <span style={{color: 'red'}}>{this.state.errorMessage}</span>
+        );
+    }
+
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign up
-                </Typography>
+                        Inscription
+                    </Typography>
+                    {this.showErrorMessage()}
                     <form className={classes.form} noValidate>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
@@ -78,7 +93,7 @@ class SignUp extends React.Component {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="Mot de passe"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
@@ -93,13 +108,13 @@ class SignUp extends React.Component {
                             color="primary"
                             className={classes.submit}
                             onClick={this.onSubmit}>
-                            Sign Up
+                            Inscrire
                         </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
                                 <Link href={Routes.login} variant="body2">
-                                    Already have an account? Sign in
-                            </Link>
+                                    Vous avez déjà un compte? connecter
+                                </Link>
                             </Grid>
                         </Grid>
                     </form>

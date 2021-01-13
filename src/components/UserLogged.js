@@ -1,15 +1,17 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import { withStyles } from '@material-ui/styles';
+import {withStyles} from '@material-ui/styles';
 import PropTypes from 'prop-types';
-import { Users } from "../services/Services";
-import { TOKEN_KEY } from "../utils/Constants";
+import {Users} from "../services/Services";
+import {TOKEN_KEY} from "../utils/Constants";
 
+
+// Component displayin all users logged
 class UserLogged extends React.Component {
 
     constructor(props) {
@@ -19,12 +21,13 @@ class UserLogged extends React.Component {
         };
     }
 
+    // Fetch all users logged
     componentDidMount() {
         const token = localStorage.getItem(TOKEN_KEY)
         Users(token)
             .then(res => {
                 const users = res.data.result.user;
-                this.setState({ users });
+                this.setState({users});
             })
             .catch(error => {
                 console.log(error);
@@ -37,7 +40,7 @@ class UserLogged extends React.Component {
             return (
                 <ListItem alignItems="flex-start" divider key={user}>
                     <ListItemAvatar>
-                        <Avatar alt={user} src="name" />
+                        <Avatar alt={user} src="name"/>
                     </ListItemAvatar>
                     <ListItemText
                         primary={user}
@@ -48,7 +51,7 @@ class UserLogged extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
             <List className={classes.root}>
                 {this.listUsers()}

@@ -7,31 +7,39 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import Container from '@material-ui/core/Container';
-import { LoginService } from "../services/Services";
-import { TOKEN_KEY, USER_ID_KEY, USER_NAME_KEY} from "../utils/Constants";
+import {LoginService} from "../services/Services";
+import {TOKEN_KEY, USER_ID_KEY, USER_NAME_KEY} from "../utils/Constants";
 import Routes from '../Routes';
 
-
+// Component to login
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             login: null,
-            password: null
+            password: null,
+            correctLogin: true
         };
     }
 
     onSubmit = (event) => {
         event.preventDefault();
         console.log(this.state);
-        let { login, password } = this.state;
+        let {login, password} = this.state;
         LoginService(login, password)
             .then(res => {
                 console.log(res);
+                // Set the error value
+                if (res.data.result.status === "failure") {
+                    this.setState({correctLogin: false});
+                    return;
+                }
+
+                // Save the user_name and token to allow inputMessage to send a message
                 localStorage.setItem(TOKEN_KEY, res.data.result.token);
                 localStorage.setItem(USER_ID_KEY, res.data.result.id);
                 localStorage.setItem(USER_NAME_KEY, this.state.login);
@@ -45,23 +53,32 @@ class SignIn extends React.Component {
     changeHandler = (event) => {
         let nam = event.target.name;
         let val = event.target.value;
-        this.setState({ [nam]: val });
+        this.setState({[nam]: val});
+    }
+
+    wrongLogin = () => {
+        if (!this.state.correctLogin)
+            return (
+                <span style={{color: 'red'}}>Mauvais login ou mot de passe</span>
+            );
+        return ' ';
     }
 
 
-
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
         return (
             <Container component="main" maxWidth="xs">
-                <CssBaseline />
+                <CssBaseline/>
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
+                        <LockOutlinedIcon/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
-        </Typography>
+                        Login
+                    </Typography>
+
+                    {this.wrongLogin()}
                     <form className={classes.form} noValidate>
                         <TextField
                             variant="outlined"
@@ -81,7 +98,7 @@ class SignIn extends React.Component {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="Mot de passe"
                             type="password"
                             id="password"
                             onChange={this.changeHandler}
@@ -95,8 +112,8 @@ class SignIn extends React.Component {
                             onClick={this.onSubmit}
                             className={classes.submit}
                         >
-                            Sign In
-          </Button>
+                            Connecter
+                        </Button>
                         <Grid container>
                             <Grid item>
                                 <Link href="/signup" variant="body2">

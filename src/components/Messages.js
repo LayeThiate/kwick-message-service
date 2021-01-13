@@ -1,72 +1,81 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { withStyles } from '@material-ui/styles';
+import {makeStyles} from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { FixedSizeList } from 'react-window';
+import {FixedSizeList} from 'react-window';
 import PropTypes from 'prop-types';
-import { TalkList } from "../services/Services";
-import { TOKEN_KEY, USER_NAME_KEY } from "../utils/Constants";
-import { time } from "../utils/Utils";
+import {TalkList} from "../services/Services";
+import {TOKEN_KEY, USER_NAME_KEY} from "../utils/Constants";
+import {time} from "../utils/Utils";
 
+// This component displays all messages by most recent to older
+// user can filter the messages to show
 class Message extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            messages: [],
-            messageToDisplay: [],
+            messages: [], // all messages
+            messageToDisplay: [], // messages to display
             isLoaded: false,
-            hourFilter: 0, 
+            hourFilter: 0,
             optionsFilter: [3, 6, 12],
         };
     }
 
+    // Fetch all messages
     getMessages = () => {
         const token = localStorage.getItem(TOKEN_KEY);
         TalkList(token)
             .then(res => {
                 const messages = res.data.result.talk;
+                // sorte messages
                 const sortedMessages = messages.sort((t1, t2) => {
                     return t2.timestamp - t1.timestamp;
                 });
-                this.setState({ messages: messages, messageToDisplay: sortedMessages, isLoaded: true });
+                this.setState({messages: messages, messageToDisplay: sortedMessages, isLoaded: true});
             })
             .catch(error => {
                 console.log(error);
             });
     }
 
+    // Set message to display depending of filter value
     filterMessage = () => {
         if (this.state.hourFilter != 0) {
+            // Timestamp of the value choosen
             const timestampSec = Date.now() - this.state.hourFilter * 3600;
             const newMessages =
                 this.state.messages.filter(message => {
+                    // Compare timestamp of each message to that choosen
                     const diffSec = Math.floor(
-                        (new Date(timestampSec) - new Date(message.timestamp*1000)) / 1000);
+                        (new Date(timestampSec) - new Date(message.timestamp * 1000)) / 1000);
                     return diffSec < this.state.hourFilter * 3600;
                 });
-            console.log(newMessages);
-            this.setState({ messageToDisplay: newMessages });
+            // console.log(newMessages);
+            this.setState({messageToDisplay: newMessages});
         } else {
-            this.setState({ messageToDisplay: this.state.messages });
+            this.setState({messageToDisplay: this.state.messages});
         }
     }
 
+    // Set the filter value choosen
     handleFilter = event => {
-        this.setState({ hourFilter: event.target.value }, this.filterMessage);
+        this.setState({hourFilter: event.target.value}, this.filterMessage);
     }
 
+    // Fetch All messages to display
     componentDidMount() {
-        if(this.state.messageToDisplay.length === 0) {
+        if (this.state.messageToDisplay.length === 0) {
             this.getMessages();
-        }
-        else {
+        } else {
             this.filterMessage();
         }
     }
 
-    Row = ({ index, style }) => {
+    // Show a message 
+    Row = ({index, style}) => {
         const mess = this.state.messageToDisplay[index];
         // console.log(mess);
         const userName = localStorage.getItem(USER_NAME_KEY);
@@ -112,7 +121,7 @@ class Message extends React.Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
         if (this.state.isLoaded)
             return (
                 <div>
@@ -126,7 +135,7 @@ class Message extends React.Component {
                                 id: 'filled-time',
                             }}
                         >
-                            <option aria-label="None" value={0} />
+                            <option aria-label="None" value={0}/>
                             <option value={3}>3</option>
                             <option value={6}>6</option>
                             <option value={12}>12</option>
@@ -170,5 +179,5 @@ const styles = makeStyles((theme) => ({
     },
 }));
 
-Message.propTypes = { classes: PropTypes.object.isRequired, };
+Message.propTypes = {classes: PropTypes.object.isRequired,};
 export default withStyles(styles)(Message);

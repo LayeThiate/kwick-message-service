@@ -20,4 +20,8 @@ const SentMessage = (token, userId, message) => {
     return axios.get(`http://greenvelvet.alwaysdata.net/kwick/api/say/${token}/${userId}/${message}`);
 }
 
-export {SignUpService, LoginService, Users, TalkList, SentMessage};
+const LogOut = (token, userId) => {
+    return axios.get(`http://greenvelvet.alwaysdata.net/kwick/api/logout/${token}/${userId}`);
+}
+
+export {SignUpService, LoginService, Users, TalkList, SentMessage, LogOut};
