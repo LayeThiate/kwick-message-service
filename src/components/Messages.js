@@ -38,7 +38,7 @@ class Message extends React.Component {
     }
 
     filterMessage = () => {
-        if (this.state.hourFilter !== 0) {
+        if (this.state.hourFilter != 0) {
             const timestampSec = Date.now() - this.state.hourFilter * 3600;
             const newMessages =
                 this.state.messages.filter(message => {
@@ -48,12 +48,9 @@ class Message extends React.Component {
                 });
             console.log(newMessages);
             this.setState({ messageToDisplay: newMessages });
-            console.log(this.state.messageToDisplay);
+        } else {
+            this.setState({ messageToDisplay: this.state.messages });
         }
-    }
-    
-    changeMessagesToDisplay = newMessages => {
-        this.setState({ messageToDisplay: newMessages });
     }
 
     handleFilter = event => {
@@ -61,12 +58,17 @@ class Message extends React.Component {
     }
 
     componentDidMount() {
-        this.getMessages();
+        if(this.state.messageToDisplay.length === 0) {
+            this.getMessages();
+        }
+        else {
+            this.filterMessage();
+        }
     }
 
     Row = ({ index, style }) => {
         const mess = this.state.messageToDisplay[index];
-        console.log(mess.timestamp)
+        // console.log(mess);
         const userName = localStorage.getItem(USER_NAME_KEY);
         const styles = {
             message: {
@@ -124,7 +126,7 @@ class Message extends React.Component {
                                 id: 'filled-time',
                             }}
                         >
-                            <option aria-label="None" value="" />
+                            <option aria-label="None" value={0} />
                             <option value={3}>3</option>
                             <option value={6}>6</option>
                             <option value={12}>12</option>
@@ -133,7 +135,7 @@ class Message extends React.Component {
                     </FormControl>
                     <FixedSizeList
                         height={500}
-                        itemCount={this.state.messages.length}
+                        itemCount={this.state.messageToDisplay.length}
                         itemSize={50}
                         className={classes.list}>
                         {this.Row}
